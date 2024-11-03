@@ -21,7 +21,7 @@ const geometry = new THREE.CylinderGeometry(1, 1, 1, 30, 30, true);
 
 // Load texture
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('./texture.png');
+const texture = textureLoader.load('/texture.png');
 
 const material = new THREE.MeshStandardMaterial({
   map: texture,
@@ -79,34 +79,9 @@ composer.addPass(bloomPass);
 
 
 // Add GUI
-const gui = new GUI({ 
-  container: document.body 
-});
-
-// Make GUI non-focusable for accessibility
-gui.domElement.setAttribute('aria-hidden', 'true');
-gui.domElement.style.pointerEvents = 'none'; // Optional: if you want to completely disable interaction
-
-// Make all GUI controls non-focusable
-const makeGuiNonFocusable = () => {
-  const elements = gui.domElement.querySelectorAll('button, input, select, a[href]');
-  elements.forEach(el => {
-    el.setAttribute('tabindex', '-1');
-    el.style.pointerEvents = 'auto'; // Re-enable pointer events for controls
-  });
-};
-
-// Add your GUI controls
+const gui = new GUI();
 gui.add(bloomPass, 'strength', 0, 10, 1).name('Bloom Strength');
 gui.add(material, 'envMapIntensity', 0, 3, 0.1).name('Env Map Intensity');
-
-// Apply non-focusable attributes after adding controls
-makeGuiNonFocusable();
-
-// Optional: Apply non-focusable attributes whenever GUI is changed
-gui.onChange(() => {
-  makeGuiNonFocusable();
-});
 
 // Set up GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
@@ -138,20 +113,7 @@ gsap.to(canvasContainer, {
     start: 'top top',
     end: 'bottom bottom',
     scrub: 1,
-    onEnter: () => {
-      // Trigger the bouncing animation when entering the viewport
-      gsap.to(canvasContainer, {
-        y: '0%',
-        ease: 'bounce.out',
-        duration: 2,
-        repeat: 2, // Bounce 3 times in total
-        yoyo: true,
-        onComplete: () => {
-          // After bouncing, set it to stay at the bottom
-          gsap.set(canvasContainer, { y: '0%' });
-        }
-      });
-    }
+    markers: true, // helpful for debugging
   }
 });
 
