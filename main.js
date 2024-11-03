@@ -79,9 +79,34 @@ composer.addPass(bloomPass);
 
 
 // Add GUI
-const gui = new GUI();
+const gui = new GUI({ 
+  container: document.body 
+});
+
+// Make GUI non-focusable for accessibility
+gui.domElement.setAttribute('aria-hidden', 'true');
+gui.domElement.style.pointerEvents = 'none'; // Optional: if you want to completely disable interaction
+
+// Make all GUI controls non-focusable
+const makeGuiNonFocusable = () => {
+  const elements = gui.domElement.querySelectorAll('button, input, select, a[href]');
+  elements.forEach(el => {
+    el.setAttribute('tabindex', '-1');
+    el.style.pointerEvents = 'auto'; // Re-enable pointer events for controls
+  });
+};
+
+// Add your GUI controls
 gui.add(bloomPass, 'strength', 0, 10, 1).name('Bloom Strength');
 gui.add(material, 'envMapIntensity', 0, 3, 0.1).name('Env Map Intensity');
+
+// Apply non-focusable attributes after adding controls
+makeGuiNonFocusable();
+
+// Optional: Apply non-focusable attributes whenever GUI is changed
+gui.onChange(() => {
+  makeGuiNonFocusable();
+});
 
 // Set up GSAP ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
