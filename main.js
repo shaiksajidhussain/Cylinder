@@ -21,7 +21,7 @@ const geometry = new THREE.CylinderGeometry(1, 1, 1, 30, 30, true);
 
 // Load texture
 const textureLoader = new THREE.TextureLoader();
-const texture = textureLoader.load('/texture.png');
+const texture = textureLoader.load('./texture.png');
 
 const material = new THREE.MeshStandardMaterial({
   map: texture,
@@ -113,7 +113,20 @@ gsap.to(canvasContainer, {
     start: 'top top',
     end: 'bottom bottom',
     scrub: 1,
-    markers: true, // helpful for debugging
+    onEnter: () => {
+      // Trigger the bouncing animation when entering the viewport
+      gsap.to(canvasContainer, {
+        y: '0%',
+        ease: 'bounce.out',
+        duration: 2,
+        repeat: 2, // Bounce 3 times in total
+        yoyo: true,
+        onComplete: () => {
+          // After bouncing, set it to stay at the bottom
+          gsap.set(canvasContainer, { y: '0%' });
+        }
+      });
+    }
   }
 });
 
