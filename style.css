@@ -1,0 +1,17 @@
+*{
+  margin: 0;
+  padding: 0; 
+}
+
+body{
+  background-color: black;
+  overflow: hidden;
+}
+
+
+h1 {
+  /* Instead of using low contrast colors, use: */
+  color: #FFFFFF;  /* White text */
+  background-color: #000000;  /* Black background */
+  /* Or any other high-contrast combination */
+}
